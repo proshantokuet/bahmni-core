@@ -65,9 +65,10 @@ public class PatientDaoImpl implements PatientDao {
                 .withPatientAddress(addressFieldName, addressFieldValue, addressSearchResultFields)
                 .withPatientIdentifier(identifier, filterOnAllIdentifiers)
                 .withPatientAttributes(customAttribute, getPersonAttributeIds(customAttributeFields), getPersonAttributeIds(patientSearchResultFields))
-                .withProgramAttributes(programAttributeFieldValue, programAttributeType)
-                .withLocation(loginLocationUuid, filterPatientsByLocation)
                 .buildSqlQuery(length, offset);
+                //.withProgramAttributes(programAttributeFieldValue, programAttributeType)
+                //.withLocation(loginLocationUuid, filterPatientsByLocation)
+                
         return sqlQuery.list();
     }
 
