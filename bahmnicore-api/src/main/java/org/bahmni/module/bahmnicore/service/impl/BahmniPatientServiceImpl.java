@@ -93,4 +93,11 @@ public class BahmniPatientServiceImpl implements BahmniPatientService {
         return patientDao.getByAIsToB(aIsToB);
     }
 
+	@Override
+	public int updatePatientAttributeInfoInPerson(String uic,
+			String registrationDate, String mobileNo, String motherName,int personId) {
+		// TODO Auto-generated method stub
+		return patientDao.updatePatientAttributeInfoInPerson(uic, registrationDate, mobileNo, motherName,personId);
+	}
+
 }

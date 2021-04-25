@@ -4523,4 +4523,12 @@
     		INSERT INTO role_privilege (role, privilege) VALUES ('Anonymous', 'Get Locations');
     	</sql>
     </changeSet>
+    <changeSet author="tanvir" id="person_table_change-1.0.1">
+	 	<addColumn tableName="person">
+			<column name="uic" type="varchar(255)" />
+			<column name="registration_date" type="varchar(255)" />
+			<column name="mothers_name" type="varchar(255)" />
+			<column name="contact_no" type="varchar(255)" />
+		</addColumn>
+	 </changeSet> 
 </databaseChangeLog>

@@ -24,4 +24,6 @@ public interface PatientDao {
     public List<Patient> getPatients(String partialIdentifier, boolean shouldMatchExactPatientId);
 
     public List<RelationshipType> getByAIsToB(String aIsToB);
+    
+    public int updatePatientAttributeInfoInPerson(String uic,String registrationDate,String mobileNo,String motherName,int personId);
 }

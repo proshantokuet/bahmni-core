@@ -29,16 +29,17 @@ public class PatientSearchBuilder {
 			"p.birthdate as birthDate, " +
 			"p.death_date as deathDate, " +
 			"p.date_created as dateCreated, " +
-			"primary_identifier.identifier as identifier "; 
+			"primary_identifier.identifier as identifier, " +
+			" concat('{\"RegistrationDate\":','\"',IFNULL(p.registration_date ,''),'\"',',','\"UIC\":','\"',IFNULL(p.uic ,''),'\"',',','\"MobileNo\":','\"',IFNULL(p.contact_no ,''),'\"',',','\"birthMothersFirstName\":','\"',IFNULL(p.mothers_name ,''),'\"' ,'}')  as customAttribute ";
 	public static final String WHERE_CLAUSE = " where p.voided = 'false' and pn.voided = 'false' and pn.preferred=true ";
 	public static final String FROM_TABLE = " from person p ";
 	public static final String JOIN_CLAUSE = " left join person_name pn on pn.person_id = p.person_id" +
 			" left join person_address pa on p.person_id=pa.person_id and pa.voided = 'false'" +
 			" JOIN (SELECT identifier, patient_id" +
 			"      FROM patient_identifier pi" + IDENTIFIER_SEARCH +
-			"      GROUP BY pi.patient_id) as primary_identifier ON p.person_id = primary_identifier.patient_id";
+			"      ) as primary_identifier ON p.person_id = primary_identifier.patient_id";
 	private static final String GROUP_BY_KEYWORD = " group by ";
-	public static final String ORDER_BY = " order by primary_identifier.identifier asc LIMIT :limit OFFSET :offset";
+	public static final String ORDER_BY = "  LIMIT :limit OFFSET :offset";
 	private static final String LIMIT_PARAM = "limit";
 	private static final String OFFSET_PARAM = "offset";
 
@@ -58,7 +59,8 @@ public class PatientSearchBuilder {
 		from  = FROM_TABLE;
 		join = JOIN_CLAUSE;
 		orderBy = ORDER_BY;
-		groupBy = " p.person_id";
+		//groupBy = " p.person_id";
+		groupBy = " ";
 		this.sessionFactory = sessionFactory;
 		types = new HashMap<>();
 
@@ -74,7 +76,7 @@ public class PatientSearchBuilder {
 		PatientAddressFieldQueryHelper patientAddressQueryHelper = new PatientAddressFieldQueryHelper(addressFieldName,addressFieldValue, addressAttributeFields);
 		where = patientAddressQueryHelper.appendToWhereClause(where);
 		select = patientAddressQueryHelper.selectClause(select);
-		groupBy = patientAddressQueryHelper.appendToGroupByClause(groupBy);
+		//groupBy = patientAddressQueryHelper.appendToGroupByClause(groupBy);
 		types.putAll(patientAddressQueryHelper.addScalarQueryResult());
 		return this;
 	}
@@ -91,10 +93,10 @@ public class PatientSearchBuilder {
 		}
 
 		PatientAttributeQueryHelper patientAttributeQueryHelper = new PatientAttributeQueryHelper(customAttribute,personAttributeIds,attributeIds);
-		select = patientAttributeQueryHelper.selectClause(select);
-		join = patientAttributeQueryHelper.appendToJoinClause(join);
+		//select = patientAttributeQueryHelper.selectClause(select);
+		//join = patientAttributeQueryHelper.appendToJoinClause(join);
 		where = patientAttributeQueryHelper.appendToWhereClause(where);
-		types.putAll(patientAttributeQueryHelper.addScalarQueryResult());
+		//types.putAll(patientAttributeQueryHelper.addScalarQueryResult());
 		return this;
 	}
 
@@ -125,7 +127,8 @@ public class PatientSearchBuilder {
 
 	public SQLQuery buildSqlQuery(Integer limit, Integer offset){
 		String joinWithVisit = join.replace(VISIT_JOIN, visitJoin);
-		String query = select + from + joinWithVisit + where + GROUP_BY_KEYWORD + groupBy  + orderBy;
+		//String query = select + from + joinWithVisit + where + GROUP_BY_KEYWORD + groupBy  + orderBy;
+		String query = select + from + joinWithVisit + where  + orderBy;
 
 		SQLQuery sqlQuery = sessionFactory.getCurrentSession()
 				.createSQLQuery(query)
@@ -138,7 +141,9 @@ public class PatientSearchBuilder {
 				.addScalar("gender", StandardBasicTypes.STRING)
 				.addScalar("birthDate", StandardBasicTypes.DATE)
 				.addScalar("deathDate", StandardBasicTypes.DATE)
-				.addScalar("dateCreated", StandardBasicTypes.TIMESTAMP);
+				.addScalar("dateCreated", StandardBasicTypes.TIMESTAMP)
+				.addScalar("customAttribute", StandardBasicTypes.STRING);
+				
 
 		Iterator<Map.Entry<String,Type>> iterator = types.entrySet().iterator();
 

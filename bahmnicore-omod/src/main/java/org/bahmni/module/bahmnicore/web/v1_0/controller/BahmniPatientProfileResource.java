@@ -4,12 +4,14 @@ package org.bahmni.module.bahmnicore.web.v1_0.controller;
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bahmni.module.bahmnicore.service.BahmniPatientService;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.hibernate.NonUniqueObjectException;
 import org.hibernate.exception.DataException;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.Person;
+import org.openmrs.PersonAttribute;
 import org.openmrs.Relationship;
 import org.openmrs.RelationshipType;
 import org.openmrs.api.APIAuthenticationException;
@@ -66,11 +68,13 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
 
     private EmrPatientProfileService emrPatientProfileService;
     private IdentifierSourceServiceWrapper identifierSourceServiceWrapper;
+    private BahmniPatientService bahmniPatientService;
 
     @Autowired
-    public BahmniPatientProfileResource(EmrPatientProfileService emrPatientProfileService, IdentifierSourceServiceWrapper identifierSourceServiceWrapper) {
+    public BahmniPatientProfileResource(EmrPatientProfileService emrPatientProfileService, IdentifierSourceServiceWrapper identifierSourceServiceWrapper,BahmniPatientService bahmniPatientService) {
         this.emrPatientProfileService = emrPatientProfileService;
         this.identifierSourceServiceWrapper = identifierSourceServiceWrapper;
+        this.bahmniPatientService = bahmniPatientService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -127,6 +131,11 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
         try {
             delegate = emrPatientProfileService.save(delegate);
             setRelationships(delegate);
+            PersonAttribute uic = delegate.getPatient().getAttribute(34);
+            PersonAttribute registrationDate = delegate.getPatient().getAttribute(40);
+            PersonAttribute birthMotherName = delegate.getPatient().getAttribute(41);
+            PersonAttribute mobileNo = delegate.getPatient().getAttribute(42);
+            bahmniPatientService.updatePatientAttributeInfoInPerson(uic.getValue(), registrationDate.getValue(), mobileNo.getValue(), birthMotherName.getValue(),delegate.getPatient().getPerson().getPersonId());
             return new ResponseEntity<>(ConversionUtil.convertToRepresentation(delegate, Representation.FULL), HttpStatus.OK);
         } catch (ContextAuthenticationException e) {
             return new ResponseEntity<Object>(RestUtil.wrapErrorResponse(e, e.getMessage()), HttpStatus.FORBIDDEN);
@@ -165,6 +174,11 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
         try {
             delegate = emrPatientProfileService.save(delegate);
             setRelationships(delegate);
+            PersonAttribute uic = delegate.getPatient().getAttribute(34);
+            PersonAttribute registrationDate = delegate.getPatient().getAttribute(40);
+            PersonAttribute birthMotherName = delegate.getPatient().getAttribute(41);
+            PersonAttribute mobileNo = delegate.getPatient().getAttribute(42);
+            bahmniPatientService.updatePatientAttributeInfoInPerson(uic.getValue(), registrationDate.getValue(), mobileNo.getValue(), birthMotherName.getValue(),delegate.getPatient().getPerson().getPersonId());
             return new ResponseEntity<>(ConversionUtil.convertToRepresentation(delegate, Representation.FULL), HttpStatus.OK);
         } catch (ContextAuthenticationException e) {
             return new ResponseEntity<Object>(RestUtil.wrapErrorResponse(e, e.getMessage()), HttpStatus.FORBIDDEN);

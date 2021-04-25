@@ -65,9 +65,9 @@ public class PatientDaoImpl implements PatientDao {
                 .withPatientAddress(addressFieldName, addressFieldValue, addressSearchResultFields)
                 .withPatientIdentifier(identifier, filterOnAllIdentifiers)
                 .withPatientAttributes(customAttribute, getPersonAttributeIds(customAttributeFields), getPersonAttributeIds(patientSearchResultFields))
-                .buildSqlQuery(length, offset);
                 //.withProgramAttributes(programAttributeFieldValue, programAttributeType)
                 //.withLocation(loginLocationUuid, filterPatientsByLocation)
+                .buildSqlQuery(length, offset);
                 
         return sqlQuery.list();
     }
@@ -250,4 +250,14 @@ public class PatientDaoImpl implements PatientDao {
         querytoGetPatients.setString("aIsToB", aIsToB);
         return querytoGetPatients.list();
     }
+
+	@Override
+	public int updatePatientAttributeInfoInPerson(String uic,
+			String registrationDate, String mobileNo, String motherName,int personId) {
+		String updateSql = ""
+				+ "UPDATE openmrs.person set uic = '"+uic+"',registration_date = '"+registrationDate+"',mothers_name = '"+motherName+"',contact_no = '"+mobileNo+"' "
+				+ " where  person_id = "+personId+"";		
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(updateSql);
+		return query.executeUpdate();
+	}
 }

@@ -1,6 +1,7 @@
 package org.bahmni.module.bahmnicore.web.v1_0.controller;
 
 import org.apache.commons.io.FileUtils;
+import org.bahmni.module.bahmnicore.service.BahmniPatientService;
 import org.bahmni.module.bahmnicore.web.v1_0.BaseIntegrationTest;
 import org.hibernate.exception.DataException;
 import org.junit.Before;
@@ -40,7 +41,8 @@ public class BahmniPatientProfileResourceIT extends BaseIntegrationTest {
 
     @Autowired
     private EmrPatientProfileService emrPatientProfileService;
-
+    @Autowired
+    private BahmniPatientService bahmniPatientService;
     private BahmniPatientProfileResource bahmniPatientProfileResource;
     private SimpleObject propertiesToCreate;
     private ClassLoader classLoader;
@@ -55,7 +57,7 @@ public class BahmniPatientProfileResourceIT extends BaseIntegrationTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         executeDataSet("createPatientMetadata.xml");
-        bahmniPatientProfileResource = new BahmniPatientProfileResource(emrPatientProfileService, identifierSourceServiceWrapper);
+        bahmniPatientProfileResource = new BahmniPatientProfileResource(emrPatientProfileService, identifierSourceServiceWrapper,bahmniPatientService);
         when(identifierSourceServiceWrapper.getSequenceValueUsingIdentifierSourceUuid("dead-cafe")).thenReturn("300010");
         when(identifierSourceServiceWrapper.generateIdentifierUsingIdentifierSourceUuid("dead-cafe", "")).thenReturn("BAH300010");
         classLoader = getClass().getClassLoader();
