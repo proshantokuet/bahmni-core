@@ -95,9 +95,9 @@ public class BahmniPatientServiceImpl implements BahmniPatientService {
 
 	@Override
 	public int updatePatientAttributeInfoInPerson(String uic,
-			String registrationDate, String mobileNo, String motherName,int personId) {
+			String registrationDate, String mobileNo, String motherName,int personId,String identifier) {
 		// TODO Auto-generated method stub
-		return patientDao.updatePatientAttributeInfoInPerson(uic, registrationDate, mobileNo, motherName,personId);
+		return patientDao.updatePatientAttributeInfoInPerson(uic, registrationDate, mobileNo, motherName,personId,identifier);
 	}
 
 }
