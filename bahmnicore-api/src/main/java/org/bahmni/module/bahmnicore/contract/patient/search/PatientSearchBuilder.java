@@ -34,7 +34,7 @@ public class PatientSearchBuilder {
 	public static final String WHERE_CLAUSE = " where p.voided = 'false' and pn.voided = 'false' and pn.preferred=true ";
 	public static final String FROM_TABLE = " from person p ";
 	public static final String JOIN_CLAUSE = " left join person_name pn on pn.person_id = p.person_id" +
-			" left join person_address pa on p.person_id=pa.person_id and pa.voided = 'false'" +
+			" left join person_address pa on p.person_id=pa.person_id and pa.voided = 'false' and pa.preferred = true" +
 			" JOIN (SELECT identifier, patient_id" +
 			"      FROM patient_identifier pi" + IDENTIFIER_SEARCH +
 			"      ) as primary_identifier ON p.person_id = primary_identifier.patient_id";
