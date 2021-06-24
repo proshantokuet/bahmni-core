@@ -131,12 +131,8 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
         try {
             delegate = emrPatientProfileService.save(delegate);
             setRelationships(delegate);
-            PersonAttribute uic = delegate.getPatient().getAttribute(34);
-            PersonAttribute registrationDate = delegate.getPatient().getAttribute(40);
-            PersonAttribute birthMotherName = delegate.getPatient().getAttribute(41);
-            PersonAttribute mobileNo = delegate.getPatient().getAttribute(42);
-            PatientIdentifier identifierPatient = delegate.getPatient().getPatientIdentifier(3);
-            bahmniPatientService.updatePatientAttributeInfoInPerson(uic.getValue(), registrationDate.getValue(), mobileNo.getValue(), birthMotherName.getValue(),delegate.getPatient().getPerson().getPersonId(),identifierPatient.getIdentifier());
+            PersonAttribute mobileNo = delegate.getPatient().getAttribute(27);
+            bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(), delegate.getPatient().getPerson().getPersonId());
             return new ResponseEntity<>(ConversionUtil.convertToRepresentation(delegate, Representation.FULL), HttpStatus.OK);
         } catch (ContextAuthenticationException e) {
             return new ResponseEntity<Object>(RestUtil.wrapErrorResponse(e, e.getMessage()), HttpStatus.FORBIDDEN);
@@ -175,12 +171,8 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
         try {
             delegate = emrPatientProfileService.save(delegate);
             setRelationships(delegate);
-            PersonAttribute uic = delegate.getPatient().getAttribute(34);
-            PersonAttribute registrationDate = delegate.getPatient().getAttribute(40);
-            PersonAttribute birthMotherName = delegate.getPatient().getAttribute(41);
-            PersonAttribute mobileNo = delegate.getPatient().getAttribute(42);
-            PatientIdentifier identifierPatient = delegate.getPatient().getPatientIdentifier(3);
-            bahmniPatientService.updatePatientAttributeInfoInPerson(uic.getValue(), registrationDate.getValue(), mobileNo.getValue(), birthMotherName.getValue(),delegate.getPatient().getPerson().getPersonId(),identifierPatient.getIdentifier());
+            PersonAttribute mobileNo = delegate.getPatient().getAttribute(27);
+            bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(), delegate.getPatient().getPerson().getPersonId());
             return new ResponseEntity<>(ConversionUtil.convertToRepresentation(delegate, Representation.FULL), HttpStatus.OK);
         } catch (ContextAuthenticationException e) {
             return new ResponseEntity<Object>(RestUtil.wrapErrorResponse(e, e.getMessage()), HttpStatus.FORBIDDEN);
