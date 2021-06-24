@@ -132,7 +132,8 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
             delegate = emrPatientProfileService.save(delegate);
             setRelationships(delegate);
             PersonAttribute mobileNo = delegate.getPatient().getAttribute(27);
-            bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(), delegate.getPatient().getPerson().getPersonId());
+            PersonAttribute nationalityType = delegate.getPatient().getAttribute(41);
+            bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(),nationalityType.getValue(), delegate.getPatient().getPerson().getPersonId());
             return new ResponseEntity<>(ConversionUtil.convertToRepresentation(delegate, Representation.FULL), HttpStatus.OK);
         } catch (ContextAuthenticationException e) {
             return new ResponseEntity<Object>(RestUtil.wrapErrorResponse(e, e.getMessage()), HttpStatus.FORBIDDEN);
@@ -172,7 +173,8 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
             delegate = emrPatientProfileService.save(delegate);
             setRelationships(delegate);
             PersonAttribute mobileNo = delegate.getPatient().getAttribute(27);
-            bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(), delegate.getPatient().getPerson().getPersonId());
+            PersonAttribute nationalityType = delegate.getPatient().getAttribute(41);
+            bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(),nationalityType.getValue(), delegate.getPatient().getPerson().getPersonId());
             return new ResponseEntity<>(ConversionUtil.convertToRepresentation(delegate, Representation.FULL), HttpStatus.OK);
         } catch (ContextAuthenticationException e) {
             return new ResponseEntity<Object>(RestUtil.wrapErrorResponse(e, e.getMessage()), HttpStatus.FORBIDDEN);

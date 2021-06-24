@@ -25,5 +25,5 @@ public interface PatientDao {
 
     public List<RelationshipType> getByAIsToB(String aIsToB);
     
-    public int updatePatientAttributeInfoInPerson(String mobileNo,int personId);
+    public int updatePatientAttributeInfoInPerson(String mobileNo,String nationalityType,int personId);
 }
