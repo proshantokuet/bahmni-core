@@ -30,14 +30,22 @@ public class PatientSearchBuilder {
 			"p.death_date as deathDate, " +
 			"p.date_created as dateCreated, " +
 			"primary_identifier.identifier as identifier, " +
+			"extra_identifiers.identifiers as extraIdentifiers, " +
 			" concat('{\"Majhi Mobile Number\":','\"',IFNULL(p.contact_no ,''),'\"' ,'}')  as customAttribute ";
 	public static final String WHERE_CLAUSE = " where p.voided = 'false' and pn.voided = 'false' and pn.preferred=true ";
 	public static final String FROM_TABLE = " from person p ";
 	public static final String JOIN_CLAUSE = " left join person_name pn on pn.person_id = p.person_id" +
 			" left join person_address pa on p.person_id=pa.person_id and pa.voided = 'false' and pa.preferred = true" +
 			" JOIN (SELECT identifier, patient_id" +
-			"      FROM patient_identifier pi" + IDENTIFIER_SEARCH +
-			"      ) as primary_identifier ON p.person_id = primary_identifier.patient_id";
+			"      FROM patient_identifier pi  JOIN patient_identifier_type pit ON pi.identifier_type = pit.patient_identifier_type_id AND pi.voided IS FALSE AND pit.retired IS FALSE "
+			+ " JOIN global_property gp ON gp.property = 'bahmni.primaryIdentifierType' AND gp.property_value = pit.uuid " + IDENTIFIER_SEARCH +
+			"      ) as primary_identifier ON p.person_id = primary_identifier.patient_id" +
+			" LEFT JOIN (SELECT concat('{', group_concat((concat('\"', pit.name, '\":\"', pi.identifier, '\"')) SEPARATOR ','), '}') AS identifiers," +
+			"        patient_id" +
+			"      FROM patient_identifier pi" +
+			"        JOIN patient_identifier_type pit ON pi.identifier_type = pit.patient_identifier_type_id AND pi.voided IS FALSE AND pit.retired IS FALSE "+
+			" JOIN global_property gp ON gp.property = 'bahmni.primaryIdentifierType' AND gp.property_value != pit.uuid" +
+			"  GROUP BY pi.patient_id) as extra_identifiers ON p.person_id = extra_identifiers.patient_id";
 	private static final String GROUP_BY_KEYWORD = " group by ";
 	public static final String ORDER_BY = "  LIMIT :limit OFFSET :offset";
 	private static final String LIMIT_PARAM = "limit";
@@ -142,7 +150,8 @@ public class PatientSearchBuilder {
 				.addScalar("birthDate", StandardBasicTypes.DATE)
 				.addScalar("deathDate", StandardBasicTypes.DATE)
 				.addScalar("dateCreated", StandardBasicTypes.TIMESTAMP)
-				.addScalar("customAttribute", StandardBasicTypes.STRING);
+				.addScalar("customAttribute", StandardBasicTypes.STRING)
+				.addScalar("extraIdentifiers", StandardBasicTypes.STRING);
 				
 
 		Iterator<Map.Entry<String,Type>> iterator = types.entrySet().iterator();

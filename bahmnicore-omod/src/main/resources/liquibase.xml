@@ -4529,4 +4529,14 @@
 			<column name="nationality_type" type="varchar(255)" />
 		</addColumn>
 	 </changeSet> 
+	 <changeSet author="tanvir" id="person_table_change-1.0.2">
+        <sql>
+		update
+		person p
+		join person_attribute pa ON
+		pa.person_id = p.person_id AND
+		pa.person_attribute_type_id = 27
+		set p.contact_no = pa.value;
+        </sql>
+	 </changeSet> 
 </databaseChangeLog>
