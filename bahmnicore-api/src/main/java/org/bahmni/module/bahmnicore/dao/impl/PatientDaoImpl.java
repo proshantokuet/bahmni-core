@@ -252,9 +252,9 @@ public class PatientDaoImpl implements PatientDao {
     }
 
 	@Override
-	public int updatePatientAttributeInfoInPerson(String mobileNo,String nationalityType,int personId) {
+	public int updatePatientAttributeInfoInPerson(String mobileNo,String nationalityType,int personId,String mahjeeNo,String clinicCode,String srhService) {
 		String updateSql = ""
-				+ "UPDATE openmrs.person set contact_no = '"+mobileNo+"',nationality_type = '"+nationalityType+"'"
+				+ "UPDATE openmrs.person set contact_no = '"+mobileNo+"',nationality_type = '"+nationalityType+"',mahjee_contact_no = '"+mahjeeNo+"',clinic_code = '"+clinicCode+"',srh_service='"+srhService+"'"
 				+ " where  person_id = "+personId+"";		
 		Query query = sessionFactory.getCurrentSession().createSQLQuery(updateSql);
 		return query.executeUpdate();

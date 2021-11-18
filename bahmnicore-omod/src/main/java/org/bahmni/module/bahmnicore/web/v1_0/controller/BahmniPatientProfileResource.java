@@ -4,6 +4,8 @@ package org.bahmni.module.bahmnicore.web.v1_0.controller;
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bahmni.module.bahmnicore.service.BahmniPatientService;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.hibernate.NonUniqueObjectException;
@@ -69,6 +71,8 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
     private EmrPatientProfileService emrPatientProfileService;
     private IdentifierSourceServiceWrapper identifierSourceServiceWrapper;
     private BahmniPatientService bahmniPatientService;
+	protected final Log log = LogFactory.getLog(getClass());
+
 
     @Autowired
     public BahmniPatientProfileResource(EmrPatientProfileService emrPatientProfileService, IdentifierSourceServiceWrapper identifierSourceServiceWrapper,BahmniPatientService bahmniPatientService) {
@@ -131,9 +135,23 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
         try {
             delegate = emrPatientProfileService.save(delegate);
             setRelationships(delegate);
-            PersonAttribute mobileNo = delegate.getPatient().getAttribute(27);
-            PersonAttribute nationalityType = delegate.getPatient().getAttribute(36);
-            bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(),nationalityType.getValue(), delegate.getPatient().getPerson().getPersonId());
+            log.error("Entering to get" + 1);
+            PersonAttribute mobileNo = delegate.getPatient().getAttribute(38);
+            log.error("mobileNo" + mobileNo.getValue());
+            PersonAttribute nationalityType = delegate.getPatient().getAttribute(40);
+            log.error("nationalityType" + nationalityType.getValue());
+            PersonAttribute mahjeeMobileNo = delegate.getPatient().getAttribute(27);
+            log.error("mahjeeMobileNo" + mahjeeMobileNo.getValue());
+            PersonAttribute clinicCode = delegate.getPatient().getAttribute(53);
+            log.error("clinicCode" + clinicCode.getValue());
+            PersonAttribute srhService = delegate.getPatient().getAttribute(51);
+            log.error("get Done" + 1);
+            if(srhService == null) {
+            	bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(),nationalityType.getValue(), delegate.getPatient().getPerson().getPersonId(),mahjeeMobileNo.getValue(),clinicCode.getValue(),"");
+            }
+            else {
+            	bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(),nationalityType.getValue(), delegate.getPatient().getPerson().getPersonId(),mahjeeMobileNo.getValue(),clinicCode.getValue(),srhService.getValue());
+            }
             return new ResponseEntity<>(ConversionUtil.convertToRepresentation(delegate, Representation.FULL), HttpStatus.OK);
         } catch (ContextAuthenticationException e) {
             return new ResponseEntity<Object>(RestUtil.wrapErrorResponse(e, e.getMessage()), HttpStatus.FORBIDDEN);
@@ -172,9 +190,17 @@ public class BahmniPatientProfileResource extends DelegatingCrudResource<Patient
         try {
             delegate = emrPatientProfileService.save(delegate);
             setRelationships(delegate);
-            PersonAttribute mobileNo = delegate.getPatient().getAttribute(27);
-            PersonAttribute nationalityType = delegate.getPatient().getAttribute(36);
-            bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(),nationalityType.getValue(), delegate.getPatient().getPerson().getPersonId());
+            PersonAttribute mobileNo = delegate.getPatient().getAttribute(38);
+            PersonAttribute nationalityType = delegate.getPatient().getAttribute(40);
+            PersonAttribute mahjeeMobileNo = delegate.getPatient().getAttribute(27);
+            PersonAttribute clinicCode = delegate.getPatient().getAttribute(53);
+            PersonAttribute srhService = delegate.getPatient().getAttribute(51);
+            if(srhService == null) {
+            	bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(),nationalityType.getValue(), delegate.getPatient().getPerson().getPersonId(),mahjeeMobileNo.getValue(),clinicCode.getValue(),"");
+            }
+            else {
+            	bahmniPatientService.updatePatientAttributeInfoInPerson(mobileNo.getValue(),nationalityType.getValue(), delegate.getPatient().getPerson().getPersonId(),mahjeeMobileNo.getValue(),clinicCode.getValue(),srhService.getValue());
+            }
             return new ResponseEntity<>(ConversionUtil.convertToRepresentation(delegate, Representation.FULL), HttpStatus.OK);
         } catch (ContextAuthenticationException e) {
             return new ResponseEntity<Object>(RestUtil.wrapErrorResponse(e, e.getMessage()), HttpStatus.FORBIDDEN);

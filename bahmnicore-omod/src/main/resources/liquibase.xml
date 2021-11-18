@@ -4539,4 +4539,11 @@
 		set p.contact_no = pa.value;
         </sql>
 	 </changeSet> 
+	 	 <changeSet author="tanvir" id="person_table_change-1.0.3">
+	 	<addColumn tableName="person">
+	 		<column name="mahjee_contact_no" type="varchar(255)" />
+			<column name="clinic_code" type="varchar(255)" />
+			<column name="srh_service" type="varchar(255)" />
+		</addColumn>
+	 </changeSet> 
 </databaseChangeLog>

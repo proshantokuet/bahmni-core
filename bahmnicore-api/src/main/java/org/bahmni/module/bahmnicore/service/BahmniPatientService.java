@@ -19,5 +19,5 @@ public interface BahmniPatientService {
 
     public List<RelationshipType> getByAIsToB(String aIsToB);
     
-    public int updatePatientAttributeInfoInPerson(String mobileNo,String nationalityType,int personId);
+    public int updatePatientAttributeInfoInPerson(String mobileNo,String nationalityType,int personId,String mahjeeNo,String clinicCode,String srhService);
 }
