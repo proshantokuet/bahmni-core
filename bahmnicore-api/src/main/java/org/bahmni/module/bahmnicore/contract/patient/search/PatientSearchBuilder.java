@@ -31,7 +31,7 @@ public class PatientSearchBuilder {
 			"p.date_created as dateCreated, " +
 			"primary_identifier.identifier as identifier, " +
 			"extra_identifiers.identifiers as extraIdentifiers, " +
-			" concat('{\"contactNumber\":','\"',IFNULL(p.contact_no ,''),'\"' ,'}')  as customAttribute ";
+			" concat('{\"contactNumber\":','\"',IFNULL(p.contact_no ,''),'\"',',','\"idNo\":','\"',IFNULL(p.identification_no ,''),'\"' ,'}')  as customAttribute ";
 	public static final String WHERE_CLAUSE = " where p.voided = 'false' and pn.voided = 'false' and pn.preferred=true ";
 	public static final String FROM_TABLE = " from person p ";
 	public static final String JOIN_CLAUSE = " left join person_name pn on pn.person_id = p.person_id" +

@@ -46,7 +46,8 @@ public class PatientAttributeQueryHelper {
 		if(StringUtils.isEmpty(customAttribute) || personAttributeTypeIds.size() == 0){
 			return where;
 		}
-		return combine(where, "and", enclose(" p.contact_no like "+ "'%" + StringEscapeUtils.escapeSql(customAttribute) + "%' "));
+
+		return combine(where, "and", enclose(" p.contact_no like "+ "'%" + StringEscapeUtils.escapeSql(customAttribute) + "%'"+" OR p.identification_no like "+ "'%" + StringEscapeUtils.escapeSql(customAttribute) + "%' "));
 	}
 
 	public Map<String,Type> addScalarQueryResult(){

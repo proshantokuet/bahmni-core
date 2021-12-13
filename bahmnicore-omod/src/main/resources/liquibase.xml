@@ -4546,4 +4546,9 @@
 			<column name="srh_service" type="varchar(255)" />
 		</addColumn>
 	 </changeSet> 
+	 <changeSet author="tanvir" id="person_table_change-1.0.4">
+	 	<addColumn tableName="person">
+	 		<column name="identification_no" type="varchar(255)" />
+		</addColumn>
+	 </changeSet> 
 </databaseChangeLog>
